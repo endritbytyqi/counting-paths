@@ -26,11 +26,11 @@ function countPathsWithCondition(X, Y, path = "") {
   let paths = [];
 
   // Recursive cases: move east and move north
-  if (X > 0 && isValidPath(path + "E")) {
+  if (X > 0) {
     paths = paths.concat(countPathsWithCondition(X - 1, Y, path + "E"));
   }
 
-  if (Y > 0 && isValidPath(path + "N")) {
+  if (Y > 0) {
     paths = paths.concat(countPathsWithCondition(X, Y - 1, path + "N"));
   }
 
@@ -38,9 +38,9 @@ function countPathsWithCondition(X, Y, path = "") {
 }
 
 //use regex to validate if path contains 3 consecutive steps in a direction
-function isValidPath(path) {
-  return !/(EEE|NNN)/.test(path);
-}
+// function isValidPath(path) {
+//   return !/(EEE|NNN)/.test(path);
+// }
 
 const routesWithCondition = countPathsWithCondition(X, Y);
 console.log(`Routes for each valid path (Optional): ${routesWithCondition.join(", ")}`);
