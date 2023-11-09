@@ -1,13 +1,11 @@
 const X = process.argv[2];
 const Y = process.argv[3];
 
-
-//Check if the args are valid positive integers
 function isPositiveInteger(value) {
   return /^\d+$/.test(value);
 }
 
-function countPathsWithCondition(X, Y, path = "", consecutiveSteps = { E: 0, N: 0 }) {
+function countPathsWithCondition(X, Y, path = "") {
   if (!isPositiveInteger(X) || !isPositiveInteger(Y)) {
     console.log('Arguments should be valid integers.');
     process.exit(1);
@@ -22,23 +20,26 @@ function countPathsWithCondition(X, Y, path = "", consecutiveSteps = { E: 0, N: 
   }
 
   if (X === 0 && Y === 0) {
-    return [path]
+    return [path];
   }
 
   let paths = [];
 
-  // Move east and north and count consecutive steps
-  if (X > 0 && consecutiveSteps.E < 2) {
-    const eastConsecutiveSteps = { E: consecutiveSteps.E + 1, N: 0 };
-    paths = paths.concat(countPathsWithCondition(X - 1, Y, path + "E", eastConsecutiveSteps));
+  // Recursive cases: move east and move north
+  if (X > 0 && isValidPath(path + "E")) {
+    paths = paths.concat(countPathsWithCondition(X - 1, Y, path + "E"));
   }
 
-  if (Y > 0 && consecutiveSteps.N < 2) {
-    const northConsecutiveSteps = { E: 0, N: consecutiveSteps.N + 1 };
-    paths = paths.concat(countPathsWithCondition(X, Y - 1, path + "N", northConsecutiveSteps));
+  if (Y > 0 && isValidPath(path + "N")) {
+    paths = paths.concat(countPathsWithCondition(X, Y - 1, path + "N"));
   }
 
   return paths;
+}
+
+//use regex to validate if path contains 3 consecutive steps in a direction
+function isValidPath(path) {
+  return !/(EEE|NNN)/.test(path);
 }
 
 const routesWithCondition = countPathsWithCondition(X, Y);
